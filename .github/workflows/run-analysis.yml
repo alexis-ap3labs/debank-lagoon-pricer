@@ -38,4 +38,4 @@ jobs:
         MONGO_URI: ${{ secrets.MONGO_URI }}
         COLLECTION_NAME: ${{ secrets.COLLECTION_NAME }}
         RPC_URL: ${{ secrets.RPC_URL }}
-      run: python mongoDB/get_protocol_details.py 
+      run: python mongoDB/mongo_formatter.py 

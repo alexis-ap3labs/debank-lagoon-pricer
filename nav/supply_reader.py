@@ -2,6 +2,35 @@ import os
 from web3 import Web3
 import json
 
+def clean_address(address):
+    """Clean the address by removing any invisible characters and spaces"""
+    # Remove any whitespace
+    address = address.strip()
+    # Remove any non-hex characters except 0x
+    if address.startswith('0x'):
+        address = '0x' + ''.join(c for c in address[2:] if c in '0123456789abcdefABCDEF')
+    return address
+
+def is_valid_ethereum_address(address):
+    """Check if the address is a valid Ethereum address"""
+    if not isinstance(address, str):
+        return False
+    
+    # Clean the address first
+    address = clean_address(address)
+    
+    if not address.startswith('0x'):
+        return False
+    if len(address) != 42:  # 0x + 40 hex characters
+        print(f"Address length: {len(address)}")  # Debug print
+        return False
+    try:
+        # Try to convert to checksum address
+        Web3.to_checksum_address(address)
+        return True
+    except ValueError:
+        return False
+
 def get_vault_supply():
     # Initialize Web3 connection with Base RPC
     RPC_URL = "https://mainnet.base.org"
@@ -15,6 +44,14 @@ def get_vault_supply():
     with open('config.json', 'r') as f:
         config = json.load(f)
     vault_address = config['vault_address']
+    
+    # Clean and validate address
+    vault_address = clean_address(vault_address)
+    print(f"Cleaned address: {vault_address}")  # Debug print
+    print(f"Address length: {len(vault_address)}")  # Debug print
+    
+    if not is_valid_ethereum_address(vault_address):
+        raise ValueError(f"Invalid vault address: {vault_address}. Must be a valid Ethereum address (42 characters including '0x')")
     
     # Convert address to checksum format
     vault_address = Web3.to_checksum_address(vault_address)
