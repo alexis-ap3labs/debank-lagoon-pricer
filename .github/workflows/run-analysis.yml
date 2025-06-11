@@ -26,6 +26,12 @@ jobs:
       run: |
         echo '${{ github.event.client_payload.config }}' > config.json
     
+    - name: Create required directories
+      run: |
+        mkdir -p debank/data
+        mkdir -p nav/data
+        mkdir -p mongoDB/data
+    
     - name: Run analysis
       env:
         DEBANK_ACCESS_KEY: ${{ secrets.DEBANK_ACCESS_KEY }}
