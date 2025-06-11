@@ -16,6 +16,9 @@ def get_vault_supply():
         config = json.load(f)
     vault_address = config['vault_address']
     
+    # Convert address to checksum format
+    vault_address = Web3.to_checksum_address(vault_address)
+    
     # Minimal ABI for totalSupply function
     vault_abi = [
         {
