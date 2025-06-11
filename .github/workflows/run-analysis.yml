@@ -1,0 +1,34 @@
+name: Run Portfolio Analysis
+
+on:
+  repository_dispatch:
+    types: [run_analysis]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Create config file
+      run: |
+        echo '${{ github.event.client_payload.config }}' > config.json
+    
+    - name: Run analysis
+      env:
+        DEBANK_ACCESS_KEY: ${{ secrets.DEBANK_ACCESS_KEY }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        COLLECTION_NAME: ${{ secrets.COLLECTION_NAME }}
+        RPC_URL: ${{ secrets.RPC_URL }}
+      run: python mongoDB/get_protocol_details.py 

@@ -1,0 +1,9 @@
+{
+  "wallet_address": "0x...",
+  "vault_address": "0x...",
+  "asset": {
+    "ticker": "USDC",
+    "coingecko_id": "usd-coin"
+  },
+  "database_name": "your-database-name"
+} 
