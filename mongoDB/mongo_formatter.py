@@ -5,6 +5,14 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 from decimal import Decimal
+from web3 import Web3
+
+# Add parent directory to PYTHONPATH
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+
+from debank.protocol_details import get_all_protocol_details
+from nav.process_portfolio import process_portfolio
 
 def extract_positions(portfolio_data):
     """
@@ -86,11 +94,18 @@ def format_for_mongodb():
     with open('config.json', 'r') as f:
         config = json.load(f)
     database_name = config['database_name']
+    wallet_address = Web3.to_checksum_address(config['wallet_address'])
     
     if not all([mongo_uri, database_name, collection_name]):
         raise ValueError("Missing MongoDB configuration. Please check MONGO_URI, database_name in config.json, and COLLECTION_NAME")
     
-    # Read portfolio data
+    # Get protocol details directly
+    portfolio_data = get_all_protocol_details(wallet_address)
+    
+    # Process portfolio for NAV calculation
+    process_portfolio()
+    
+    # Read processed portfolio data
     portfolio_path = Path(__file__).parent.parent / 'nav' / 'data' / 'portfolio_processed.json'
     with open(portfolio_path, 'r') as f:
         portfolio_data = json.load(f)
