@@ -1,6 +1,7 @@
 import json
 import sys
 from pathlib import Path
+from web3 import Web3
 
 # Add parent directory to PYTHONPATH
 sys.path.append(str(Path(__file__).parent.parent))
@@ -26,12 +27,14 @@ def main():
     with open(config_path, 'r') as f:
         config = json.load(f)
     
-    # Get wallet address
+    # Get wallet address and convert to checksum format
     wallet_address = config.get('wallet_address')
-    
     if not wallet_address:
         print("Error: Wallet address not found in config.json")
         return
+    
+    # Convert to checksum address
+    wallet_address = Web3.to_checksum_address(wallet_address)
     
     print("\n=== Step 1: Active Networks Analysis ===")
     print("This step identifies all networks where the wallet has a non-zero balance")
