@@ -102,8 +102,7 @@ def format_for_mongodb():
     formatted_data = {
         'address': portfolio_data['address'],
         'vault_address': portfolio_data['vault_address'],
-        'script_execution_time': portfolio_data['script_execution_time'],
-        'timestamp': datetime.utcnow(),
+        'timestamp': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC'),
         'underlying_asset': portfolio_data['underlying_asset'],
         'nav': convert_to_mongo_compatible(portfolio_data['nav']),
         'positions': positions,
