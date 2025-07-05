@@ -1,6 +1,16 @@
-# DeBank USDC Portfolio Analyzer
+# DeBank Lagoon Pricer
 
-This project analyzes DeFi portfolios on DeBank, with a particular focus on USDC positions. It calculates the NAV (Net Asset Value) and stores data in MongoDB.
+**Universal Vault Pricing Tool for Multi-Chain DeFi Protocols**
+
+A sophisticated DeFi analytics platform that calculates Net Asset Value (NAV) for vault positions by pricing them in their underlying tokens. Specifically designed for Lagoon vaults across any blockchain network, with fully customizable configuration for seamless integration into your DeFi portfolio management workflow.
+
+## Overview
+
+This tool provides real-time NAV calculations for DeFi vault positions by:
+- **Vault-to-Token Pricing**: Converts vault shares to underlying token values
+- **Multi-Chain Support**: Works with Lagoon vaults on any blockchain network
+- **Customizable Configuration**: Adaptable to different vault types and token pairs
+- **Automated NAV Tracking**: Continuous monitoring and calculation of portfolio values
 
 ## Requirements
 
@@ -13,8 +23,8 @@ This project analyzes DeFi portfolios on DeBank, with a particular focus on USDC
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/debank-usdc.git
-cd debank-usdc
+git clone https://github.com/your-username/debank-lagoon-pricer.git
+cd debank-lagoon-pricer
 ```
 
 2. Install dependencies:
@@ -46,12 +56,32 @@ RPC_URL=your_base_rpc_url
 
 ## Usage
 
-### Local Execution
+### Local Execution Options
 
-To run the analysis:
+#### 1. Data Retrieval Only (Local Files)
+To retrieve DeBank protocol data and save locally:
 ```bash
 python mongoDB/get_protocol_details.py
 ```
+This will create local JSON files with raw protocol data without NAV calculations.
+
+#### 2. NAV Calculation (Local Files)
+To process portfolio data and calculate NAV locally:
+```bash
+python nav/process_portfolio.py
+```
+This requires the protocol data to be retrieved first and generates NAV calculations in local files.
+
+#### 3. Complete Analysis + MongoDB Storage
+To run the complete analysis, NAV calculation, and push to MongoDB:
+```bash
+python mongoDB/mongo_formatter.py
+```
+This is the **main command** that orchestrates the entire process:
+- Retrieves protocol data from DeBank
+- Calculates NAV and processes portfolio
+- Formats data for MongoDB
+- Saves to both local files and MongoDB database
 
 ### Using GitHub Actions
 
@@ -66,7 +96,7 @@ python mongoDB/get_protocol_details.py
 ## Project Structure
 
 ```
-debank-usdc/
+debank-lagoon-pricer/
 ├── .github/
 │   └── workflows/
 │       └── run-analysis.yml
@@ -96,7 +126,7 @@ debank-usdc/
 ## Features
 
 - DeFi position analysis on DeBank
-- USDC NAV calculation
+- Lagoon vault NAV calculation
 - Multi-chain position tracking
 - MongoDB data storage
 - GitHub Actions integration for automation
